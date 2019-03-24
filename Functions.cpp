@@ -14,7 +14,11 @@ void menuScreen(Pokemon &poke1, Pokemon &poke2, Pokemon &poke3)
 	}
 	else if (input == 2)
 	{
-		battleGame(poke1, poke2, poke3);
+		battlePokeSelect(poke1, poke2, poke3);
+	}
+	else if (input == 3)
+	{
+		exit(0);
 	}
 }
 void pokeInfoSelect(Pokemon &poke1, Pokemon &poke2, Pokemon &poke3)
@@ -40,15 +44,20 @@ void pokeInfoSelect(Pokemon &poke1, Pokemon &poke2, Pokemon &poke3)
 }
 void printPokeInfo(Pokemon &poke)
 {
-	cout << "Pokemon: " << poke.getName() << "\n"
+	cout << "\nPokemon: " << poke.getName() << "\n"
+		<<"Level: "<<poke.getLevel()<<"\n"
 		<< "HP: " << poke.getHP() << "\n" 
+		<<"Attack: "<<poke.getAttack()<<"\n"
+		<<"Defense: "<<poke.getDefense()<<"\n"
+		<<"Special Attack: "<<poke.getSpecialAttack()<<"\n"
+		<<"Special Defense: "<<poke.getSpecialDefense()<<"\n"
 		<< "Speed: " << poke.getSpeed() << "\n" << endl;
 	poke.printAtk1();
 	poke.printAtk2();
 	poke.printAtk3();
 	poke.printAtk4();
 }
-void battleGame(Pokemon &poke1, Pokemon &poke2, Pokemon &poke3)
+void battlePokeSelect(Pokemon &poke1, Pokemon &poke2, Pokemon &poke3)
 {
 	
 	cout << "\n1- " << poke1.getName() << endl;
@@ -65,12 +74,16 @@ void battleGame(Pokemon &poke1, Pokemon &poke2, Pokemon &poke3)
 		if (random == 1)
 		{
 			Pokemon opponentPoke(poke2);
-			attackScreen(playerPoke, opponentPoke, poke3);
+			Pokemon unused(poke3);
+			attackScreen(playerPoke, opponentPoke, unused);
+			attackCompare(playerPoke, opponentPoke, unused);
 		}
 		else
 		{
 			Pokemon opponentPoke(poke3);
-			attackScreen(playerPoke, opponentPoke, poke2);
+			Pokemon unused(poke2);
+			attackScreen(playerPoke, opponentPoke, unused);
+			attackCompare(playerPoke, opponentPoke, unused);
 		}
 	}
 	else if (input == 2)
@@ -81,12 +94,16 @@ void battleGame(Pokemon &poke1, Pokemon &poke2, Pokemon &poke3)
 		if (random == 1)
 		{
 			Pokemon opponentPoke(poke1);
-			attackScreen(playerPoke, opponentPoke, poke3);
+			Pokemon unused(poke3);
+			attackScreen(playerPoke, opponentPoke, unused);
+			attackCompare(playerPoke, opponentPoke, unused);
 		}
 		else
 		{
 			Pokemon opponentPoke(poke3);
-			attackScreen(playerPoke, opponentPoke, poke1);
+			Pokemon unused(poke1);
+			attackScreen(playerPoke, opponentPoke, unused);
+			attackCompare(playerPoke, opponentPoke, unused);
 		}
 	}
 	else if (input == 3)
@@ -97,12 +114,16 @@ void battleGame(Pokemon &poke1, Pokemon &poke2, Pokemon &poke3)
 		if (random == 1)
 		{
 			Pokemon opponentPoke(poke1);
-			attackScreen(playerPoke, opponentPoke, poke2);
+			Pokemon unused(poke2);
+			attackScreen(playerPoke, opponentPoke, unused);
+			attackCompare(playerPoke, opponentPoke, unused);
 		}
 		else
 		{
 			Pokemon opponentPoke(poke2);
-			attackScreen(playerPoke, opponentPoke, poke1);
+			Pokemon unused(poke1);
+			attackScreen(playerPoke, opponentPoke, unused);
+			attackCompare(playerPoke, opponentPoke, unused);
 		}
 	}
 }
@@ -128,18 +149,29 @@ void attackScreen(Pokemon &player, Pokemon &opponent, Pokemon &unused)
 		cout << "-";
 	}
 	cout << endl;
+}
+void attackCompare(Pokemon &player, Pokemon &opponent, Pokemon &unused)
+{
 	Pokemon first = speedCompare(player, opponent);
 	if (first.getName() == player.getName())
 	{
-		playerAttack(player, opponent, unused);
-		opponentAttack(opponent, player, unused);
-		attackScreen(player, opponent, unused);
+		while (player.getHP() != 0 && opponent.getHP() != 0)
+		{
+			playerAttack(player, opponent, unused);
+			attackScreen(player, opponent, unused);
+			opponentAttack(opponent, player, unused);
+			attackScreen(player, opponent, unused);
+		}
 	}
 	else if (first.getName() == opponent.getName());
 	{
-		opponentAttack(opponent, player, unused);
-		playerAttack(player, opponent, unused);
-		attackScreen(player, opponent, unused);
+		while (player.getHP() != 0 && opponent.getHP() != 0)
+		{
+			opponentAttack(opponent, player, unused);
+			attackScreen(player, opponent, unused);
+			playerAttack(player, opponent, unused);
+			attackScreen(player, opponent, unused);
+		}
 	}
 }
 void playerAttack(Pokemon &player, Pokemon &opponent, Pokemon &unused)

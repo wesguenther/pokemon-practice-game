@@ -17,9 +17,10 @@ int main()
 	Attack Flamethrower("Flamethrower", 90, 100, 15);
 	Attack RazorLeaf("Razor Leaf", 55, 95, 20);
 
-	Pokemon Charmander("Charmander", 100, 65, Ember, Scratch, Bite, Flamethrower);
-	Pokemon Squirtle("Squirtle", 100, 43, WaterGun, Scratch, Tackle, Bite);
-	Pokemon Bulbasaur("Bulbasaur", 100, 45, Scratch, Tackle, Bite, RazorLeaf);
+	//Pokemon name(name, HP, speed, level, attack, defense, specialattack, specialdefense, atk1, atk2, atk3, atk4)
+	Pokemon Charmander("Charmander", 100, 65, 5, 52, 43, 60, 50, Ember, Scratch, Bite, Flamethrower);
+	Pokemon Squirtle("Squirtle", 100, 43, 5, 48, 65, 50, 64, WaterGun, Scratch, Tackle, Bite);
+	Pokemon Bulbasaur("Bulbasaur", 100, 45, 5, 49, 49, 65, 65, Scratch, Tackle, Bite, RazorLeaf);
 
 	menuScreen(Charmander, Squirtle, Bulbasaur);
 
