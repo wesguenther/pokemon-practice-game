@@ -163,7 +163,7 @@ void attackCompare(Pokemon &player, Pokemon &opponent, Pokemon &unused)
 			attackScreen(player, opponent, unused);
 		}
 	}
-	else if (first.getName() == opponent.getName());
+	else if (first.getName() == opponent.getName())
 	{
 		while (player.getHP() != 0 && opponent.getHP() != 0)
 		{
@@ -194,10 +194,14 @@ void playerAttack(Pokemon &player, Pokemon &opponent, Pokemon &unused)
 	if (input == 1)
 	{
 		auto atk = player.getAtk1();
-		opponent.pokeAttack(atk);
+		float crit = critMod(opponent, atk);
+		float overallModifier = overallMod(crit);
+		opponent.pokeAttack(player, opponent, atk, overallModifier);
 		cout << "\n"<<player.getName() << " used ";
 		player.printAtk1Name();
 		cout<<"! \n";
+		
+		critDialog(crit);
 		if (opponent.getHP() <= 0)
 		{
 			cout << opponent.getName() << " has fainted. " << player.getName() << " wins!\n";
@@ -207,10 +211,13 @@ void playerAttack(Pokemon &player, Pokemon &opponent, Pokemon &unused)
 	else if (input == 2)
 	{
 		auto atk = player.getAtk2();
-		opponent.pokeAttack(atk);
+		float crit = critMod(opponent, atk);
+		float overallModifier = overallMod(crit);
+		opponent.pokeAttack(player, opponent, atk, overallModifier);
 		cout << "\n" << player.getName() << " used ";
 		player.printAtk2Name();
 		cout << "! \n";
+		critDialog(crit);
 		if (opponent.getHP() <= 0)
 		{
 			cout << opponent.getName() << " has fainted. " << player.getName() << " wins!\n";
@@ -220,10 +227,13 @@ void playerAttack(Pokemon &player, Pokemon &opponent, Pokemon &unused)
 	else if (input == 3)
 	{
 		auto atk = player.getAtk3();
-		opponent.pokeAttack(atk);
+		float crit = critMod(opponent, atk);
+		float overallModifier = overallMod(crit);
+		opponent.pokeAttack(player, opponent, atk, overallModifier);
 		cout << "\n" << player.getName() << " used ";
 		player.printAtk3Name();
 		cout << "! \n";
+		critDialog(crit);
 		if (opponent.getHP() <= 0)
 		{
 			cout << opponent.getName() << " has fainted. " << player.getName() << " wins!\n";
@@ -233,10 +243,13 @@ void playerAttack(Pokemon &player, Pokemon &opponent, Pokemon &unused)
 	else if (input == 4)
 	{
 		auto atk = player.getAtk4();
-		opponent.pokeAttack(atk);
+		float crit = critMod(opponent, atk);
+		float overallModifier = overallMod(crit);
+		opponent.pokeAttack(player, opponent, atk, overallModifier);
 		cout << "\n" << player.getName() << " used ";
 		player.printAtk4Name();
 		cout << "! \n";
+		critDialog(crit);
 		if (opponent.getHP() <= 0)
 		{
 			cout << opponent.getName() << " has fainted. " << player.getName() << " wins!\n";
@@ -250,34 +263,46 @@ void opponentAttack(Pokemon &opponent, Pokemon &player, Pokemon &unused)
 	if (x == 1)
 	{
 		auto atk2 = opponent.getAtk1();
-		player.pokeAttack(atk2);
+		float crit = critMod(player, atk2);
+		float overallModifier = overallMod(crit);
+		player.pokeAttack(opponent, player, atk2, overallModifier);
 		cout << "\n" << opponent.getName() << " used ";
 		opponent.printAtk1Name();
 		cout << "! \n";
+		critDialog(crit);
 	}
 	else if (x == 2)
 	{
 		auto atk2 = opponent.getAtk2();
-		player.pokeAttack(atk2);
+		float crit = critMod(player, atk2);
+		float overallModifier = overallMod(crit);
+		player.pokeAttack(opponent, player, atk2, overallModifier);
 		cout << "\n" << opponent.getName() << " used ";
 		opponent.printAtk2Name();
 		cout << "! \n";
+		critDialog(crit);
 	}
 	else if (x == 3)
 	{
 		auto atk2 = opponent.getAtk3();
-		player.pokeAttack(atk2);
+		float crit = critMod(player, atk2);
+		float overallModifier = overallMod(crit);
+		player.pokeAttack(opponent, player, atk2, overallModifier);
 		cout << "\n" << opponent.getName() << " used ";
 		opponent.printAtk3Name();
 		cout << "! \n";
+		critDialog(crit);
 	}
 	else if (x == 4)
 	{
 		auto atk2 = opponent.getAtk4();
-		player.pokeAttack(atk2);
+		float crit = critMod(player, atk2);
+		float overallModifier = overallMod(crit);
+		player.pokeAttack(opponent, player, atk2, overallModifier);
 		cout << "\n" << opponent.getName() << " used ";
 		opponent.printAtk4Name();
 		cout << "! \n";
+		critDialog(crit);
 	}
 	if (player.getHP() <= 0)
 	{
@@ -314,4 +339,73 @@ Pokemon speedCompare(Pokemon &poke1, Pokemon &poke2)
 	{
 		return poke2;
 	}
+}
+float critMod(Pokemon &target, Attack &atk)
+{
+	if (target.getBaseType() == pokeType::Fire||target.getSubType()==pokeType::Fire)
+	{
+		if (atk.getAtkType() == attackType::Ground || atk.getAtkType() == attackType::Rock || atk.getAtkType() == attackType::Water)
+		{
+			return 2.0;
+		}
+		else if (atk.getAtkType() == attackType::Bug || atk.getAtkType() == attackType::Steel || atk.getAtkType() == attackType::Fire || atk.getAtkType() == attackType::Grass
+			|| atk.getAtkType() == attackType::Ice || atk.getAtkType() == attackType::Fairy)
+		{
+			return 0.5;
+		}
+		else
+		{
+			return 1.0;
+		}
+	}
+	if (target.getBaseType() == pokeType::Grass || target.getSubType() == pokeType::Grass)
+	{
+		if (atk.getAtkType() == attackType::Flying || atk.getAtkType() == attackType::Poison || atk.getAtkType() == attackType::Bug||atk.getAtkType()==attackType::Fire||atk.getAtkType()==attackType::Ice)
+		{
+			return 2.0;
+		}
+		else if (atk.getAtkType() == attackType::Ground || atk.getAtkType() == attackType::Water || atk.getAtkType() == attackType::Grass || atk.getAtkType() == attackType::Electric)
+		{
+			return 0.5;
+		}
+		else
+		{
+			return 1.0;
+		}
+	}
+	if (target.getBaseType() == pokeType::Water || target.getSubType() == pokeType::Water)
+	{
+		if (atk.getAtkType() == attackType::Grass || atk.getAtkType() == attackType::Electric)
+		{
+			return 2.0;
+		}
+		else if (atk.getAtkType() == attackType::Steel || atk.getAtkType() == attackType::Fire || atk.getAtkType() == attackType::Water || atk.getAtkType() == attackType::Ice)
+		{
+			return 0.5;
+		}
+		else
+		{
+			return 1.0;
+		}
+	}
+}
+void critDialog(float x)
+{
+	if (x == 2.0)
+	{
+		cout << "\nIt's super effective!\n" << endl;
+	}
+	else if (x == 0.5)
+	{
+		cout << "\nIt's not very effective!\n" << endl;
+	}
+	else if (x == 0)
+	{
+		cout << "\nIt's not effecive.\n" << endl;
+	}
+}
+float overallMod(float critMod)
+{
+	float overallMod = critMod;
+	return overallMod;
 }

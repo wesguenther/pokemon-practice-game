@@ -44,11 +44,22 @@ void Pokemon::printAtk4Name()
 {
 	cout << atk4.getName();
 }
-void Pokemon::pokeAttack(Attack &atk)
+void Pokemon::pokeAttack(Pokemon attacker, Pokemon defender, Attack &atk, float modifier)
 {
-	HP = (HP - atk.getPower());
+	int damage;
+	if (atk.getDamageCategory() == damageCategory::Physical)
+	{
+		damage = (((((((2 * level) / 5) + 2)*atk.getPower()*(attacker.attack / defender.defense)) / 50) + 2))*modifier;
+	}
+	else if (atk.getDamageCategory() == damageCategory::Special)
+	{
+		damage = (((((((2 * level) / 5) + 2)*atk.getPower()*(attacker.specialAttack / defender.specialDefense)) / 50) + 2))*modifier;
+	}
+	HP = HP - damage;
 }
 void Pokemon::resetHP()
 {
-	HP = 100;
+	HP = baseHP;
 }
+
+
