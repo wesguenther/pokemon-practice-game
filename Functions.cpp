@@ -157,7 +157,7 @@ void attackCompare(Pokemon &player, Pokemon &opponent, Pokemon &unused)
 	{
 		while (player.getHP() != 0 && opponent.getHP() != 0)
 		{
-			playerAttack(player, opponent, unused);
+			playerAttackChoice(player, opponent, unused);
 			attackScreen(player, opponent, unused);
 			opponentAttack(opponent, player, unused);
 			attackScreen(player, opponent, unused);
@@ -169,12 +169,12 @@ void attackCompare(Pokemon &player, Pokemon &opponent, Pokemon &unused)
 		{
 			opponentAttack(opponent, player, unused);
 			attackScreen(player, opponent, unused);
-			playerAttack(player, opponent, unused);
+			playerAttackChoice(player, opponent, unused);
 			attackScreen(player, opponent, unused);
 		}
 	}
 }
-void playerAttack(Pokemon &player, Pokemon &opponent, Pokemon &unused)
+void playerAttackChoice(Pokemon &player, Pokemon &opponent, Pokemon &unused)
 {
 	cout << "\n1-";
 	player.printAtk1Name();
@@ -194,67 +194,38 @@ void playerAttack(Pokemon &player, Pokemon &opponent, Pokemon &unused)
 	if (input == 1)
 	{
 		auto atk = player.getAtk1();
-		float crit = critMod(opponent, atk);
-		float overallModifier = overallMod(crit);
-		opponent.pokeAttack(player, opponent, atk, overallModifier);
-		cout << "\n"<<player.getName() << " used ";
-		player.printAtk1Name();
-		cout<<"! \n";
-		
-		critDialog(crit);
-		if (opponent.getHP() <= 0)
-		{
-			cout << opponent.getName() << " has fainted. " << player.getName() << " wins!\n";
-			endGame(player, opponent, unused);
-		}
+		playerAttack(player, opponent, unused, atk);
 	}
 	else if (input == 2)
 	{
 		auto atk = player.getAtk2();
-		float crit = critMod(opponent, atk);
-		float overallModifier = overallMod(crit);
-		opponent.pokeAttack(player, opponent, atk, overallModifier);
-		cout << "\n" << player.getName() << " used ";
-		player.printAtk2Name();
-		cout << "! \n";
-		critDialog(crit);
-		if (opponent.getHP() <= 0)
-		{
-			cout << opponent.getName() << " has fainted. " << player.getName() << " wins!\n";
-			endGame(player, opponent, unused);
-		}
+		playerAttack(player, opponent, unused, atk);
 	}
 	else if (input == 3)
 	{
 		auto atk = player.getAtk3();
-		float crit = critMod(opponent, atk);
-		float overallModifier = overallMod(crit);
-		opponent.pokeAttack(player, opponent, atk, overallModifier);
-		cout << "\n" << player.getName() << " used ";
-		player.printAtk3Name();
-		cout << "! \n";
-		critDialog(crit);
-		if (opponent.getHP() <= 0)
-		{
-			cout << opponent.getName() << " has fainted. " << player.getName() << " wins!\n";
-			endGame(player, opponent, unused);
-		}
+		playerAttack(player, opponent, unused, atk);
 	}
 	else if (input == 4)
 	{
 		auto atk = player.getAtk4();
-		float crit = critMod(opponent, atk);
-		float overallModifier = overallMod(crit);
-		opponent.pokeAttack(player, opponent, atk, overallModifier);
-		cout << "\n" << player.getName() << " used ";
-		player.printAtk4Name();
-		cout << "! \n";
-		critDialog(crit);
-		if (opponent.getHP() <= 0)
-		{
-			cout << opponent.getName() << " has fainted. " << player.getName() << " wins!\n";
-			endGame(player, opponent, unused);
-		}	
+		playerAttack(player, opponent, unused, atk);
+	}
+}
+void playerAttack(Pokemon &player, Pokemon &opponent, Pokemon &unused, Attack &atk)
+{
+	float crit = critMod(opponent, atk);
+	float overallModifier = overallMod(crit);
+	opponent.pokeAttack(player, opponent, atk, overallModifier);
+	cout << "\n" << player.getName() << " used ";
+	player.printAtk1Name();
+	cout << "! \n";
+
+	critDialog(crit);
+	if (opponent.getHP() <= 0)
+	{
+		cout << opponent.getName() << " has fainted. " << player.getName() << " wins!\n";
+		endGame(player, opponent, unused);
 	}
 }
 void opponentAttack(Pokemon &opponent, Pokemon &player, Pokemon &unused)
